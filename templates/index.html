@@ -13,13 +13,15 @@
 <script>
    const alertBox=document.getElementById("daily-alert");
    const viewBtn = document.getElementById('view-again-btn');
-   const originalContent = alertBox ? alertBox.innerHTML : "";
+   //const originalContent = alertBox ? alertBox.innerHTML : "";
 
   // Auto-fade the daily alert after 8 seconds
   setTimeout(function() {
     if (alertBox) {
       alertBox.style.transition = "opacity 1s ease";
       alertBox.style.opacity = "0";
+
+      //After fade animation ends(1s later), hide it
       setTimeout(() => {
         alertBox.style.display = "none";   // hide instead of remove
         viewBtn.style.display = "inline-block"; // show button
