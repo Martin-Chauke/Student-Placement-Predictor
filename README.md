@@ -13,9 +13,12 @@ effectively.
 
 Objective:
 To build and deploy a Student Placement Prediction Web App using Python 
-and Flask that enables users to: 
+and Flask that enables users to:
+
 ● Enter relevant student information via a simple web form. 
+
 ● Receive real-time predictions (e.g., “Placed” or “Not Placed”) using a 
 pre-trained machine learning model. 
+
 ● Use predictions to make data-informed decisions for career planning 
 and support.
