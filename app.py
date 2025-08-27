@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 from functools import wraps
 from datetime import datetime
-import random
+#import random
 
 
 INTERVENTIONS_NOTIFICATIONS=[
@@ -214,6 +214,8 @@ def register():
 def get_daily_notification():
     today=datetime.now().timetuple().tm_yday # day of the year.
     index=today % len(INTERVENTIONS_NOTIFICATIONS) # Rotate the notifiction for eac
+    return INTERVENTIONS_NOTIFICATIONS[index]
+
 
 # Authentication login code
 @app.route("/login", methods=["GET","POST"])
@@ -231,8 +233,8 @@ def login():
             session["is_admin"]=user["is_admin"]
 
             # Pick a random  intervention notification (Placement Insight of the Day)
-            notification=random.choice(INTERVENTIONS_NOTIFICATIONS)
-            session["daily_notification"]=notification  #Store in session 
+           # notification=random.choice(INTERVENTIONS_NOTIFICATIONS)
+            #session["daily_notification"]=notification  #Store in session 
 
             flash("Login successful!","success")
             return redirect(url_for("home"))
@@ -272,8 +274,8 @@ def home():
                                  ).fetchall()
     conn.close()
 
-    #Get daily notification from session(if ay available)
-    notification= session.pop("daily_notification",None)
+    #Get daily notification from session(if any available for all users)
+    notification=get_daily_notification()
     return render_template("index.html", 
                            username=session.get("username"),
                            placed_students=placed_students,
