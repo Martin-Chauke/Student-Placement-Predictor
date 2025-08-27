@@ -7,6 +7,89 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from dotenv import load_dotenv
 from functools import wraps
+from datetime import datetime
+import random
+
+
+INTERVENTIONS_NOTIFICATIONS=[
+    # Academics
+    {"category": "Academics", "message": "📘 Recommend remedial classes for students with consistently low CGPA."},
+    {"category": "Academics", "message": "📚 Encourage faculty-led study groups for academically weak students."},
+    {"category": "Academics", "message": "📝 Introduce peer tutoring programs to help students improve coursework performance."},
+    {"category": "Academics", "message": "🔬 Suggest mini-projects in core subjects to strengthen practical understanding."},
+    {"category": "Academics", "message": "📊 Track academic progress regularly and share with students for self-improvement."},
+
+    # Aptitude
+    {"category": "Aptitude", "message": "🧩 Organize aptitude training sessions to support students with weak logical reasoning."},
+    {"category": "Aptitude", "message": "🧮 Arrange weekly quantitative reasoning practice tests."},
+    {"category": "Aptitude", "message": "🎯 Encourage students to participate in inter-college aptitude competitions."},
+    {"category": "Aptitude", "message": "🧠 Provide free access to aptitude question banks and e-learning resources."},
+    {"category": "Aptitude", "message": "📅 Schedule regular mock aptitude assessments to track progress."},
+
+    # Profile Building
+    {"category": "Profile", "message": "💼 Encourage internships and project work to boost student profiles."},
+    {"category": "Profile", "message": "🌐 Suggest students contribute to open-source projects for hands-on experience."},
+    {"category": "Profile", "message": "📜 Promote industry-recognized certifications in technical and soft skills."},
+    {"category": "Profile", "message": "🛠️ Help students build digital portfolios showcasing their projects."},
+    {"category": "Profile", "message": "🎓 Invite alumni to share strategies for improving placement readiness."},
+
+    # Soft Skills
+    {"category": "Soft Skills", "message": "🗣️ Conduct communication skills workshops for students with weak verbal ability."},
+    {"category": "Soft Skills", "message": "🤝 Arrange group discussions to improve teamwork and collaboration skills."},
+    {"category": "Soft Skills", "message": "🎤 Provide public speaking and presentation practice opportunities."},
+    {"category": "Soft Skills", "message": "📖 Share resources on writing professional emails and resumes."},
+    {"category": "Soft Skills", "message": "💬 Host mock HR interviews to build student confidence."},
+
+    # Career Counseling
+    {"category": "Career Counseling", "message": "🎯 Plan one-on-one counseling for borderline students to identify focus areas."},
+    {"category": "Career Counseling", "message": "🔍 Identify individual strengths and weaknesses through career assessments."},
+    {"category": "Career Counseling", "message": "📆 Create personalized career roadmaps for students not meeting placement standards."},
+    {"category": "Career Counseling", "message": "👥 Pair students with faculty mentors for continuous guidance."},
+    {"category": "Career Counseling", "message": "🧭 Organize career awareness sessions on diverse job roles and industries."},
+
+    # Technical
+    {"category": "Technical", "message": "💻 Offer coding bootcamps for students with weak programming foundations."},
+    {"category": "Technical", "message": "⚙️ Conduct technical workshops aligned with industry demands."},
+    {"category": "Technical", "message": "📟 Encourage hackathon participation to apply problem-solving skills."},
+    {"category": "Technical", "message": "🛠️ Introduce short-term courses on emerging technologies (AI, Data Science, Cloud)."},
+    {"category": "Technical", "message": "🔗 Facilitate collaboration with industry professionals for skill sessions."},
+
+    # Placement Prep
+    {"category": "Placement Prep", "message": "📝 Arrange resume-building and mock interview workshops for final-year students."},
+    {"category": "Placement Prep", "message": "📑 Share past placement papers and solutions for structured practice."},
+    {"category": "Placement Prep", "message": "📹 Record mock interviews to provide constructive feedback."},
+    {"category": "Placement Prep", "message": "🎯 Encourage timed problem-solving practice to simulate real test conditions."},
+    {"category": "Placement Prep", "message": "📊 Analyze placement test results to tailor support for weak areas."},
+
+    # General Support
+    {"category": "Support", "message": "🤝 Facilitate mentorship programs pairing seniors with struggling students."},
+    {"category": "Support", "message": "🏆 Recognize and reward incremental improvements in placement readiness."},
+    {"category": "Support", "message": "📌 Display placement preparation tips on department notice boards."},
+    {"category": "Support", "message": "📢 Provide weekly newsletters with job market updates and resources."},
+    {"category": "Support", "message": "📅 Organize monthly career talks with industry leaders."},
+
+    # Industry Exposure
+    {"category": "Industry Exposure", "message": "🏭 Arrange industrial visits to help students connect theory with practice."},
+    {"category": "Industry Exposure", "message": "🌍 Host company webinars to expose students to real-world expectations."},
+    {"category": "Industry Exposure", "message": "🔧 Encourage participation in skill-based online competitions."},
+    {"category": "Industry Exposure", "message": "🧑‍🏫 Partner with industries for live projects and case studies."},
+    {"category": "Industry Exposure", "message": "📈 Share labor market trends with faculty and students for informed planning."},
+
+    # Wellness
+    {"category": "Wellness", "message": "🧘 Provide stress management and wellness workshops during placement season."},
+    {"category": "Wellness", "message": "🎶 Organize cultural and recreational events to maintain student morale."},
+    {"category": "Wellness", "message": "🏃 Encourage physical fitness as part of holistic placement preparation."},
+    {"category": "Wellness", "message": "💡 Share success stories of past students to inspire current batches."},
+    {"category": "Wellness", "message": "🙌 Celebrate small wins in placement practice to keep students motivated."},
+
+    # Data Monitoring
+    {"category": "Data Monitoring", "message": "📊 Use placement prediction trends to identify common weak factors in students."},
+    {"category": "Data Monitoring", "message": "📈 Track student improvements after interventions to assess effectiveness."},
+    {"category": "Data Monitoring", "message": "🗂️ Maintain detailed records of each student’s placement preparation journey."},
+    {"category": "Data Monitoring", "message": "🧾 Provide quarterly reports to faculty for planning academic interventions."},
+    {"category": "Data Monitoring", "message": "📍 Compare department placement readiness with institutional benchmarks."}
+]
+
 
 # Load the .env file
 load_dotenv()
@@ -126,6 +209,12 @@ def register():
 
     return render_template("register.html")
 
+
+# Notification function
+def get_daily_notification():
+    today=datetime.now().timetuple().tm_yday # day of the year.
+    index=today % len(INTERVENTIONS_NOTIFICATIONS) # Rotate the notifiction for eac
+
 # Authentication login code
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -139,6 +228,12 @@ def login():
         if user and check_password_hash(user["password"],password):
             session["user_id"]=user["id"]
             session["username"]=user["username"]
+            session["is_admin"]=user["is_admin"]
+
+            # Pick a random  intervention notification (Placement Insight of the Day)
+            notification=random.choice(INTERVENTIONS_NOTIFICATIONS)
+            session["daily_notification"]=notification  #Store in session 
+
             flash("Login successful!","success")
             return redirect(url_for("home"))
         else:
@@ -176,7 +271,14 @@ def home():
     placed_students=conn.execute("SELECT * FROM placed_students WHERE User_id=?",(user_id,)
                                  ).fetchall()
     conn.close()
-    return render_template("index.html", username=session.get("username"),placed_students=placed_students)
+
+    #Get daily notification from session(if ay available)
+    notification= session.pop("daily_notification",None)
+    return render_template("index.html", 
+                           username=session.get("username"),
+                           placed_students=placed_students,
+                           notification=notification)
+     
 
 # This is a route to view placed students for the logged-in user
 @app.route("/my_placed_students")
@@ -227,7 +329,8 @@ def predict():
             
             #Career planning  recommendation for placed students
             recommendation=(
-                "Splendid work! Keep enhancing your technical skills and consider exploring internships and trainings, leadership opportunities, higher studies."
+                "This student demonstrates a strong likelihood of placement based on academic and profile indicators." \
+                 "<<Intervention>>: Guide them toward advanced opportunities such as leadership programs, higher studies counseling, or specialized training for niche roles."
             )
 
 
@@ -259,14 +362,17 @@ def predict():
             name=request.form.get("student_name","Unknown")
             # Career planning recommendation for not placed students
             if cgpa<6.5:
-                recommendation="Focus on improving your academic performance (CGPA)."
+                recommendation="The student’s CGPA is below typical placement thresholds. " \
+                "<<Intervention>>: Recommend remedial academic support, peer-assisted study groups, and structured coaching to improve subject mastery."
             elif iq<100:
-                recommendation="Work on problem-solving and analytical skills through practice and " \
-                "aptitude training."
+                recommendation="The aptitude/IQ score is below industry expectations. " \
+                " <<Intervention>>: Organize aptitude development workshops, logical reasoning practice sessions, and encourage participation in mock aptitude tests."
             elif profile_score< 50:
-                recommendation="Build a stronger profile with internships, projects, or certifications."
+                recommendation="The profile score suggests limited industry exposure or skills. " \
+                     "<<Intervention>>: Advise internships, industry projects, hackathons, and online certifications (e.g., technical skills, communication training) to strengthen employability."
             else:
-                recommendation="Seek personalized career counseling to identify specific areas for improvement."
+                recommendation="The student’s profile is balanced but still below placement readiness standards. " \
+                "<<Intervention>>: Recommend one-on-one counseling to design a tailored career plan, including resume workshops, mock interviews, and soft-skills development"
 
         # Render result template
         return render_template("result.html", 

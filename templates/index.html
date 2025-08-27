@@ -1,3 +1,9 @@
+{% if notification %}
+<div class="alert alert-secondary mt-3">
+  <h5 class="fw-bold">🔔Placement Insight of the Day</h5>
+  <p class="mb-0"><strong>{{ notification.category}}:</strong>{{ notification.message}}</p>
+</div>
+{% endif %}
 {% extends "base.html" %}
 {% block content %}
 
