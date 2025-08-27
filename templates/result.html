@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="glass p-4 p-md-5 mx-auto text-center" style="max-width: 520px;">
+  <h3 class="mb-3">Prediction Result</h3>
+  <div class="neon-alert alert mt-2">
+    <h2 class="{{ text_color == 'text-success' and 'text-placed' or 'text-not' }}">
+      {{ placement_status }}
+    </h2>
+    <p class="mb-0">{{ confidence }}</p>
+  </div>
+
+  <div class="mt-4 text-start">
+    <p class="mb-1 fw-bold">Input Values</p>
+    <ul class="list-group">
+      <li class="list-group-item">CGPA: {{ cgpa }}</li>
+      <li class="list-group-item">IQ: {{ iq }}</li>
+      <li class="list-group-item">Profile Score: {{ profile_score }}</li>
+    </ul>
+  </div>
+
+  <a href="{{ url_for('home') }}" class="btn btn-neo mt-4">Next Prediction</a>
+</div>
+{% endblock %}

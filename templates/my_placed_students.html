@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Placed Students</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            min-height: 100vh;
+        }
+        .placed-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            padding: 32px 40px 40px 40px;
+        }
+        h2 {
+            color: #1976d2;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: #fafdff;
+            margin-bottom: 22px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(33,147,176,0.07);
+        }
+        th, td {
+            border: 1px solid #b2ebf2;
+            padding: 12px 16px;
+            text-align: left;
+        }
+        th {
+            background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        tr:nth-child(even) {
+            background: #e0f7fa;
+        }
+        tr:hover {
+            background: #b2ebf2 !important;
+        }
+        .back-link {
+            text-decoration: none;
+            color: #1976d2;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+            color: #0093e9;
+        }
+        .no-data {
+            color: #1976d2;
+            background: #e0f7fa;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    {% if placed_students %}
+<h4 class="mt-5 mb-3">All Placed Students</h4>
+<div style="overflow-x:auto;">
+  <table class="table" border="1" cellpadding="8" style="width:100%;background:#fafdff">
+    <thead>
+      <tr style="background: linear-gradient(90deg,#43cea2 0%, #185a9d 100%); color:#fff;">
+        <th>Student Name</th>
+        <th>CGPA</th>
+        <th>IQ Level</th>
+        <th>Profile Score</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in placed_students %}
+      <tr>
+        <td>{{ student.Student_name }}</td>
+        <td>{{ student.CGPA }}</td>
+        <td>{{ student.IQ_level }}</td>
+        <td>{{ student.Profile_score }}</td>
+        <td>
+            <form method="post" style="display:inline;"> 
+              <input type="hidden" name="remove_Student_name" value="{{ student.Student_name }}">
+              <button type="submit" class="remove-btn" onclick="return confirm('Are you sure want to remove {{ student.Student_name }}?')">Remove</button>
+            </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a style="margin-top: 20px; display: inline-block; background-color: #f0f7f8; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  border-radius: 5px; padding: 8px 12px;" href="{{ url_for('home')}}" class="back-link" >&larr;🔙Home</a>
+</div>
+{% else %}
+  <p class="mt-5">No students placed yet!</p>
+{% endif %}
+ 
+    <!--<div class="placed-container">
+        <h2>Admitted Students</h2>
+        {% if students %}
+        <table>
+            <tr>
+                <th>Name</th><th>CGPA</th><th>IQ</th><th>Profile Score</th>
+            </tr>
+            {% for s in students %}
+            <tr>
+                <td>{{ s.name }}</td>
+                <td>{{ s.cgpa }}</td>
+                <td>{{ s.iq }}</td>
+                <td>{{ s.profile_score }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="no-data">No placed students found.</div>
+        {% endif %}
+        <a href="{{ url_for('home') }}" class="back-link">&larr; Back to Home</a>
+    </div>
+    -->
+</body>
+</html>
