@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="glass p-4 p-md-5 mx-auto text-center" style="max-width: 520px;">
+<div class="glass p-4 p-md-5 mx-auto text-center" style="max-width: 800px;">
   <h3 class="mb-3">Prediction Result</h3>
   <div class="neon-alert alert mt-2">
     <h2 class="{{ text_color == 'text-success' and 'text-placed' or 'text-not' }}">
@@ -17,6 +17,48 @@
       <li class="list-group-item">Profile Score: {{ profile_score }}</li>
     </ul>
   </div>
+  {% if recommendation %}
+   {%if 'CGPA' in recommendation %}
+      <div class="alert alert-danger mt-4 text-start"> 
+          <h5 class="fw-bold" style="
+                              border-color: var(--neo);
+                              box-shadow: 0 0 0 .2rem rgba(0,255,136,.35);
+                              background: #ffffff;                  /* keep white on focus */
+                              color: #000;">🚨 Career Guidance</h5>
+          <p class="mb-0" style="
+                              border-color: var(--neo);
+                              box-shadow: 0 0 0 .2rem rgba(0,255,136,.35);
+                              background: #ffffff;                  /* keep white on focus */
+                              color: #000;">{{ recommendation }}</p>
+      </div>
+   {% elif 'improve' in recommendation or 'Build' in recommendation or 'Work' in recommendation %}
+       <div class="alert alert-warning mt-4 text-start">
+          <h5 class="fw-bold" style="
+                              border-color: var(--neo);
+                              box-shadow: 0 0 0 .2rem rgba(0,255,136,.35);
+                              background: #ffffff;                  /* keep white on focus */
+                              color: #000;">⚠️ Career Guidance</h5>
+          <p class="mb-0" style="
+                              border-color: var(--neo);
+                              box-shadow: 0 0 0 .2rem rgba(0,255,136,.35);
+                              background: #ffffff;                  /* keep white on focus */
+                              color: #000;">{{ recommendation }}</p>
+       </div>
+    {% else%}
+       <div class="alert-info mt-4 text-start">
+          <h5 class="fw-bold" style="
+                              border-color: var(--neo);
+                              box-shadow: 0 0 0 .2rem rgba(0,255,136,.35);
+                              background: #ffffff;                  /* keep white on focus */
+                              color: #000;">💡Career Guidance</h5>
+          <p class="mb-0" style="
+                            border-color: var(--neo);
+                            box-shadow: 0 0 0 .2rem rgba(0,255,136,.35);
+                            background: #ffffff;                  /* keep white on focus */
+                            color: #000;">{{ recommendation }}</p>
+       </div>
+      {% endif%}
+  {%endif%}
 
   <a href="{{ url_for('home') }}" class="btn btn-neo mt-4">Next Prediction</a>
 </div>

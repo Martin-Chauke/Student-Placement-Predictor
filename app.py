@@ -206,7 +206,7 @@ def predict():
             flash("CGPA must be between 0 and 10.", "danger")
             raise ValueError("CGPA out of range!")
 
-        if not (0 <= iq <= 200):
+        if not (50 <= iq <= 200):
             flash("IQ must be between 50 and 200.", "danger")
             raise ValueError("IQ out of range!")
 
@@ -216,13 +216,21 @@ def predict():
 
         features = np.array([[cgpa, iq, profile_score]])
         prediction = model.predict(features)[0]
-         
+        
+        #Default variables
+        recommendation=""
 
         if prediction == 1:
             placement_status = "Placed ✅"
             status = "success"
             text_color = "text-success"
             
+            #Career planning  recommendation for placed students
+            recommendation=(
+                "Splendid work! Keep enhancing your technical skills and consider exploring internships and trainings, leadership opportunities, higher studies."
+            )
+
+
             #Save the placed student
             name=request.form.get("student_name","Unknown")
             user_id=session.get("user_id")
@@ -248,6 +256,17 @@ def predict():
             placement_status = "Not Placed ❌"
             status = "danger"
             text_color = "text-danger"
+            name=request.form.get("student_name","Unknown")
+            # Career planning recommendation for not placed students
+            if cgpa<6.5:
+                recommendation="Focus on improving your academic performance (CGPA)."
+            elif iq<100:
+                recommendation="Work on problem-solving and analytical skills through practice and " \
+                "aptitude training."
+            elif profile_score< 50:
+                recommendation="Build a stronger profile with internships, projects, or certifications."
+            else:
+                recommendation="Seek personalized career counseling to identify specific areas for improvement."
 
         # Render result template
         return render_template("result.html", 
@@ -255,7 +274,9 @@ def predict():
                                confidence="(Probability not available for this model)",
                                status=status,
                                text_color=text_color,
-                               cgpa=cgpa, iq=iq, profile_score=profile_score)
+                               cgpa=cgpa, iq=iq, profile_score=profile_score,
+                               recommendation=recommendation,
+                               student_name=name)
 
     except Exception as e:
         return render_template("result.html", 
