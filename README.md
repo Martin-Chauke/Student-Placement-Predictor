@@ -4,9 +4,11 @@ The placement cell of an educational institution wants to:
 
 ● Predict the likelihood of a student being placed based on specific 
 inputs like CGPA, IQ level, Profile Score. 
+
 ● Use this prediction to provide timely career guidance, recommend 
 interventions (e.g., training, internships), and allocate placement 
 resources more effectively. 
+
 While a machine learning model has already been trained to make such 
 predictions, non-technical users (like placement officers and faculty 
 members) do not have an easy way to access the model’s predictions. 
