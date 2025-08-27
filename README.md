@@ -1,5 +1,7 @@
 Business Problem 
+
 The placement cell of an educational institution wants to: 
+
 ● Predict the likelihood of a student being placed based on specific 
 inputs like CGPA, IQ level, Profile Score. 
 ● Use this prediction to provide timely career guidance, recommend 
