@@ -293,6 +293,70 @@ def my_placed_students():
     return render_template("my_placed_students.html", placed_students=placed_students)
 
 
+#This route implements the deletion or editing of the students
+#Manage placed students(Edit / Delete)
+@app.route("/edit_student/<int:student_id>", methods=["GET", "POST"])
+@login_required
+def edit_student(student_id):
+    conn = get_db_connection()
+    student = conn.execute(
+        "SELECT * FROM placed_students WHERE Id=? AND User_id=?",
+        (student_id, session["user_id"])
+    ).fetchone()
+
+    if not student:
+        conn.close()
+        flash("Student not found or you do not have permission.", "danger")
+        return redirect(url_for("my_placed_students"))
+
+    if request.method == "POST":
+        name = request.form.get("student_name")
+        cgpa = request.form.get("cgpa")
+        iq = request.form.get("iq")
+        profile_score = request.form.get("profile_score")
+
+        # Basic validation if the student name has been passed
+        if not name:
+            flash("Student name is required.", "warning")
+            return redirect(url_for("edit_student", student_id=student_id))
+
+        conn.execute("""
+            UPDATE placed_students
+            SET Student_name=?, CGPA=?, IQ_level=?, Profile_score=?
+            WHERE Id=? AND User_id=?
+        """, (name, cgpa, iq, profile_score, student_id, session["user_id"]))
+        conn.commit()
+        conn.close()
+        flash("Student details updated successfully.", "success")
+        return redirect(url_for("my_placed_students"))
+
+    conn.close()
+    return render_template("edit_student.html", student=student)
+
+
+@app.route("/delete_student/<int:student_id>", methods=["POST"])
+@login_required
+def delete_student(student_id):
+    conn = get_db_connection()
+    student = conn.execute(
+        "SELECT * FROM placed_students WHERE Id=? AND User_id=?",
+        (student_id, session["user_id"])
+    ).fetchone()
+
+    if not student:
+        conn.close()
+        flash("Student not found or you do not have permission.", "danger")
+        return redirect(url_for("my_placed_students"))
+
+    conn.execute("DELETE FROM placed_students WHERE Id=? AND User_id=?",
+                 (student_id, session["user_id"]))
+    conn.commit()
+    conn.close()
+    flash("Student removed successfully.", "info")
+    return redirect(url_for("my_placed_students"))
+
+
+
 @app.route("/about")
 def about():
     return render_template("about.html")
