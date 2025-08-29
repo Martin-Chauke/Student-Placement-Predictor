@@ -165,7 +165,7 @@ def admin_required(f):
         user = conn.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
         conn.close()
         if not user or user["is_admin"] != 1:
-            flash("Admin access required.", "danger")
+            flash("Admin access only.", "danger")
             return redirect(url_for("home"))
         return f(*args, **kwargs)
     return wrapper
@@ -175,6 +175,9 @@ def admin_required(f):
 @admin_required
 def admin_dashboard():
     conn = get_db_connection()
+    conn.row_factory=sqlite3.Row # accessing as dicts
+
+    #User removal/deletion
     if request.method=="POST":
         user_id=request.form.get("remove_user_id")
         
@@ -186,9 +189,39 @@ def admin_dashboard():
         elif user_id:
             flash("You cannot remove your self.","warning")
 
+    # Fetch users
     users = conn.execute("SELECT * FROM users").fetchall()
+    
+    # Fetch review statistics
+    rating_counts=conn.execute("""
+        SELECT rating,  COUNT(*) AS count
+        FROM app_reviews
+        GROUP BY rating
+        ORDER BY rating DESC
+ """).fetchall()
+    
+    avg_rating=conn.execute("SELECT AVG(rating) AS avg FROM app_reviews").fetchone()["avg"]
+
+    recent_reviews = conn.execute("""
+        SELECT users.username, app_reviews.rating, app_reviews.comment, app_reviews.created_at
+        FROM app_reviews
+        JOIN users ON app_reviews.reviewer_id = users.id
+        ORDER BY app_reviews.created_at DESC
+        LIMIT 5
+    """).fetchall()
+
     conn.close()
-    return render_template("admin_dashboard.html", users=users)
+    #✅Convert sqlite3.row to dict so jinja can safely render as JSON
+    rating_counts=[dict(row) for row in rating_counts]
+
+    return render_template(
+        "admin_dashboard.html",
+        users=users,
+        rating_counts=rating_counts,
+        avg_rating=avg_rating or 0,
+        total_reviews=sum(row["count"] for row in rating_counts),
+        recent_reviews=recent_reviews
+        )
 
 # Register route
 @app.route("/register",methods=["GET","POST"])
@@ -512,6 +545,23 @@ def app_reviews():
 
     conn.close()
     return render_template("app_reviews.html", reviews=reviews, avg_rating=avg_rating)
+
+# This is a public route open to anyone to see the app reviews
+@app.route("/reviews")
+def public_reviews():
+    conn = get_db_connection()
+    conn.row_factory = sqlite3.Row
+
+    reviews = conn.execute("""
+        SELECT users.username, app_reviews.rating, app_reviews.comment, app_reviews.created_at
+        FROM app_reviews
+        JOIN users ON app_reviews.reviewer_id = users.id
+        ORDER BY app_reviews.created_at DESC
+    """).fetchall()
+
+    conn.close()
+    return render_template("public_reviews.html", reviews=reviews)
+
 
 if __name__ == "__main__":
     init_db() #Ensure the users table exists

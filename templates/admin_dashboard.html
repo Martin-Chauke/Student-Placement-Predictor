@@ -5,163 +5,204 @@
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
             min-height: 100vh;
         }
         .dashboard-container {
-            max-width: 950px;
+            max-width: 1000px;
             margin: 40px auto;
             background: rgba(255,255,255,0.95);
             border-radius: 18px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-            padding: 32px 40px 40px 40px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.18);
+            padding: 32px 40px;
         }
-        h2 {
-            color: #1976d2;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
+        h2 { color: #1976d2; margin-bottom: 10px; }
         .welcome {
-            background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
-            color: #fff;
-            padding: 12px 28px;
-            border-radius: 8px;
-            margin-bottom: 22px;
+            background: linear-gradient(90deg, #43cea2, #185a9d);
+            color: #fff; padding: 12px 28px;
+            border-radius: 8px; margin-bottom: 22px;
             display: inline-block;
-            font-size: 1.1em;
-            box-shadow: 0 2px 8px rgba(67,206,162,0.08);
         }
-        .user-count {
-            margin-bottom: 18px;
-            color: #1976d2;
-            font-weight: 500;
-        }
+        .user-count { margin-bottom: 18px; color: #1976d2; font-weight: 500; }
         .alert {
-            background: #e0f7fa;
-            color: #006064;
-            border: 1px solid #4dd0e1;
-            padding: 10px;
-            margin-bottom: 12px;
-            border-radius: 5px;
+            background: #e0f7fa; color: #006064;
+            border: 1px solid #4dd0e1; padding: 10px;
+            margin-bottom: 12px; border-radius: 5px;
         }
-        h3 {
-            color: #0093e9;
-            margin-top: 30px;
-        }
+        h3 { color: #0093e9; margin-top: 30px; }
         #searchInput {
-            margin-bottom: 18px;
-            padding: 8px 12px;
-            width: 270px;
-            border: 1px solid #4dd0e1;
-            border-radius: 5px;
-            outline: none;
-            background: #f0fcff;
-            color: #1976d2;
-            font-size: 1em;
+            margin-bottom: 18px; padding: 8px 12px;
+            width: 270px; border: 1px solid #4dd0e1;
+            border-radius: 5px; outline: none;
+            background: #f0fcff; color: #1976d2;
         }
         table {
-            border-collapse: collapse;
-            width: 100%;
-            background: #fafdff;
-            margin-bottom: 22px;
-            border-radius: 10px;
-            overflow: hidden;
+            border-collapse: collapse; width: 100%;
+            background: #fafdff; margin-bottom: 22px;
+            border-radius: 10px; overflow: hidden;
             box-shadow: 0 2px 12px rgba(33,147,176,0.07);
         }
         th, td {
             border: 1px solid #b2ebf2;
-            padding: 12px 16px;
-            text-align: left;
+            padding: 12px 16px; text-align: left;
         }
         th {
-            background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+            background: linear-gradient(90deg, #43cea2, #185a9d);
             color: #fff;
-            font-weight: 600;
-            letter-spacing: 0.5px;
         }
-        tr:nth-child(even) {
-            background: #e0f7fa;
-        }
-        tr:hover {
-            background: #b2ebf2 !important;
-        }
+        tr:nth-child(even) { background: #e0f7fa; }
+        tr:hover { background: #b2ebf2 !important; }
         .remove-btn {
-            background: linear-gradient(90deg, #2193b0 0%, #6dd5ed 100%);
-            color: #fff;
-            border: none;
-            padding: 7px 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background 0.2s;
+            background: linear-gradient(90deg, #2193b0, #6dd5ed);
+            color: #fff; border: none; padding: 7px 18px;
+            border-radius: 5px; cursor: pointer;
         }
         .remove-btn:hover {
-            background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
+            background: linear-gradient(90deg, #185a9d, #43cea2);
         }
         .back-link {
-            text-decoration: none;
-            color: #1976d2;
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-top: 10px;
-            display: inline-block;
+            text-decoration: none; color: #1976d2;
+            font-weight: bold; display: inline-block;
+            margin-top: 12px;
         }
-        .back-link:hover {
-            text-decoration: underline;
-            color: #0093e9;
-        }
-    </style>
+        .back-link:hover { text-decoration: underline; color: #0093e9; }
+     
+
+    /* 📌 Review cards (added here) */
+    .reviews-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .review-card {
+        background: #f9fcff;
+        border-left: 6px solid #2193b0;
+        padding: 15px 18px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(33,147,176,0.15);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .review-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(33,147,176,0.25);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .review-user {
+        font-weight: 600;
+        color: #185a9d;
+    }
+    .review-rating {
+        background: #43cea2;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.9em;
+    }
+    .review-comment {
+        font-size: 1em;
+        color: #333;
+        margin-bottom: 6px;
+    }
+    .review-date {
+        font-size: 0.8em;
+        color: #777;
+    }
+
+</style>
 </head>
 <body>
     <div class="dashboard-container">
-        <h2>MY_DASHBOARD</h2>
-        <div class="welcome">
-            Welcome, Martin <strong>({{ session.username }})</strong>
-        </div>
-        <div class="user-count">
-            Total Registered Users: <strong>{{ users|length }}</strong>
-        </div>
+        <h2>My_Dashboard</h2>
+        <div class="welcome">Welcome, Martin <strong>{{ session.username }}</strong></div>
+        <div class="user-count">Total Registered Users: <strong>{{ users|length }}</strong></div>
+
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            <ul style="list-style:none; padding:0;">
-              {% for category, message in messages %}
-                <li class="alert">{{ message }}</li>
-              {% endfor %}
-            </ul>
+            {% for category, message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
           {% endif %}
         {% endwith %}
+
+        <!-- 👥 Manage Users -->
         <h3>Registered Users</h3>
         <input type="text" id="searchInput" placeholder="Search by username...">
         <table>
-            <tr>
-                <th>ID</th><th>Username</th><th>Email</th><th>Action</th>
-            </tr>
+            <tr><th>ID</th><th>Username</th><th>Email</th><th>Action</th></tr>
             {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
                 <td>
-                    <!--This allows the admin to decide who to remove or keep. This is in any case of condition and terms violation-->
                     <form method="post" style="display:inline;">
                         <input type="hidden" name="remove_user_id" value="{{ user.id }}">
-                        <button type="submit" class="remove-btn" onclick="return confirm('Are you sure you want to remove {{ user.username }}?');">Remove</button>
+                        <button type="submit" class="remove-btn"
+                            onclick="return confirm('Remove {{ user.username }}?');">Remove</button>
                     </form>
                 </td>
             </tr>
             {% endfor %}
         </table>
-        <a href="{{ url_for('home') }}" class="back-link">&larr;🔙Home</a>
+
+        <!-- 📊 App Review Analytics -->
+        <h3>App Review Analytics 📊</h3>
+        {% if total_reviews > 0 %}
+            <p><strong>Average Rating:</strong> {{ "%.1f"|format(avg_rating) }}/5 ({{ total_reviews }} reviews)</p>
+
+            <!-- ⭐ Rating Breakdown -->
+            <table>
+                <tr><th>Star Rating</th><th>Count</th></tr>
+                {% for row in rating_counts %}
+                <tr>
+                    <td>{{ row['rating'] }} ⭐</td>
+                    <td>{{ row['count'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <!-- 📝 Recent Reviews -->
+            <h4>Recent Reviews</h4>
+            {% if recent_reviews %}
+                <div class="reviews-container">
+                    {% for r in recent_reviews %}
+                       <div class="review-card">
+                            <div class="review-header">
+                                <span class="review-user">👤 {{ r['username'] }}</span>
+                                <span class="review-rating">{{ r['rating'] }} ⭐</span>
+                            </div>
+                            <div class="review-comment">
+                                  {{ r['comment'] or "No comment" }}
+                            </div>
+                            <div class="review-date">
+                                📅 {{ r['created_at'] }}
+                            </div>
+                        </div>
+                         {% endfor %}
+                 </div>
+                 {% endif %}
+        {% else %}
+            <p>No reviews yet.</p>
+        {% endif %}
+
+        <a href="{{ url_for('home') }}" class="back-link">🔙 Home</a>
     </div>
-    <!--This script allows us to search for users to DELETE-->
+
+    <!-- 🔎 User Search -->
     <script>
     document.getElementById('searchInput').addEventListener('keyup', function() {
-        var filter = this.value.toLowerCase();
-        var rows = document.querySelectorAll('table tr:not(:first-child)');
-        rows.forEach(function(row) {
-            var username = row.cells[1].textContent.toLowerCase();
+        let filter = this.value.toLowerCase();
+        document.querySelectorAll('table tr:not(:first-child)').forEach(function(row) {
+            let username = row.cells[1].textContent.toLowerCase();
             row.style.display = username.includes(filter) ? '' : 'none';
         });
     });

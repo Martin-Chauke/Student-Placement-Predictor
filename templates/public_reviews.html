@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>App Reviews</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 20px; }
+        .container { max-width: 700px; margin: auto; }
+        h2 { color: #1976d2; text-align: center; margin-bottom: 20px; }
+        
+        .review-card {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .username {
+            font-weight: bold;
+            color: #333;
+        }
+        .date {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .rating {
+            color: #ff9800;
+            margin-bottom: 8px;
+        }
+        .comment {
+            font-size: 1em;
+            color: #444;
+        }
+    </style>
+</head>
+<body style="background:rgb(186, 250, 160)">
+    <div class="container">
+        <h2 style="color:black"><strong>🌟 Public Reviews</strong></h2>
+        {% if reviews %}
+            {% for r in reviews %}
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="username">{{ r['username'] }}</span>
+                    <span class="date">{{ r['created_at'] }}</span>
+                </div>
+                <div class="rating">
+                    {% for i in range(r['rating']) %}⭐{% endfor %}
+                </div>
+                <div class="comment">{{ r['comment'] or "No comment" }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No reviews yet.</p>
+        {% endif %}
+        <br>
+        <a href="{{ url_for('home') }}">🔙<strong>Home</strong></a>
+    </div>
+</body>
+</html>
