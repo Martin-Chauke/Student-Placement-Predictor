@@ -129,6 +129,18 @@ def init_db():
         Profile_score REAL,
         FOREIGN KEY(User_id) REFERENCES users(id)
     )""")
+    # Create the app reviews table if it does not exists
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS app_reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reviewer_id INTEGER NOT NULL,
+    rating INTEGER NOT NULL CHECK(rating BETWEEN 1 AND 5),
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (reviewer_id) REFERENCES users (id)
+     )""")
+
+
 
     #create default admin if not exists
     admin=conn.execute("SELECT * FROM users WHERE username=?",("admin",)).fetchone()
@@ -231,11 +243,7 @@ def login():
             session["user_id"]=user["id"]
             session["username"]=user["username"]
             session["is_admin"]=user["is_admin"]
-
-            # Pick a random  intervention notification (Placement Insight of the Day)
-           # notification=random.choice(INTERVENTIONS_NOTIFICATIONS)
-            #session["daily_notification"]=notification  #Store in session 
-
+ 
             flash("Login successful!","success")
             return redirect(url_for("home"))
         else:
@@ -456,6 +464,54 @@ def predict():
                                confidence=str(e),
                                status="warning",
                                text_color="text-warning")
+
+ 
+# App reviews route
+@app.route("/app/reviews", methods=["GET", "POST"])
+@login_required
+def app_reviews():
+    conn = get_db_connection()
+
+    if request.method == "POST":
+        try:
+            rating = int(request.form.get("rating", 0))
+        except ValueError:
+            rating = 0
+        comment = (request.form.get("comment") or "").strip()
+
+        if rating < 1 or rating > 5:
+            flash("Please select a rating between 1 and 5.", "warning")
+            conn.close()
+            return redirect(url_for("app_reviews"))
+
+        # Save review
+        conn.execute(
+            "INSERT INTO app_reviews (reviewer_id, rating, comment) VALUES (?, ?, ?)",
+            (session["user_id"], rating, comment),
+        )
+        conn.commit()
+
+        # If the form included logout_after => logout immediately after saving
+        logout_after = request.form.get("logout_after")
+        conn.close()
+        flash("✅ Thanks for reviewing our app!", "success")
+        if logout_after:
+            return redirect(url_for("logout"))
+        return redirect(url_for("app_reviews"))
+
+    # GET: fetch reviews and average rating
+    avg_row = conn.execute("SELECT AVG(rating) AS avg_rating FROM app_reviews").fetchone()
+    avg_rating = avg_row["avg_rating"] if avg_row else None
+
+    reviews = conn.execute("""
+        SELECT ar.*, u.username AS reviewer_name
+        FROM app_reviews ar
+        JOIN users u ON u.id = ar.reviewer_id
+        ORDER BY ar.created_at DESC
+    """).fetchall()
+
+    conn.close()
+    return render_template("app_reviews.html", reviews=reviews, avg_rating=avg_rating)
 
 if __name__ == "__main__":
     init_db() #Ensure the users table exists
