@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="glass p-4 p-md-5 mx-auto" style="max-width: 720px;">
-  <h3 class="text-center mb-3"><strong>REGISTER</strong></h3>
+  <h3 class="text-center mb-3" style="color:black"><strong>REGISTER</strong></h3>
   <form method="POST">
     <div class="mb-3">
-      <label class="form-label">Username(Institution)</label>
+      <label class="form-label" style="color:black"><strong>Username(Institution)</strong></label>
       <input type="text" name="username" class="form-control" required placeholder="Enter your username">
     </div>
      <div class="mb-3">
-      <label class="form-label">Email</label>
+      <label class="form-label" style="color:black"><strong>Email</strong></label>
       <input type="email" name="email" class="form-control" required placeholder="Enter your email">
     </div>
     <div class="mb-3">
-      <label class="form-label">Password</label>
+      <label class="form-label" style="color:black"><strong>Password</strong></label>
       <input type="password" name="password" class="form-control" required placeholder="Enter your password">
     </div>
     <button type="submit" class="btn btn-neo w-100">Create account</button>
   </form>
-  <p class="text-center mt-3">Already registered?
-    <a href="{{ url_for('login') }}">Login</a>
+  <p class="text-center mt-3" style="color:black">Already registered?
+    <a href="{{ url_for('login') }}" style="color:white">Login</a>
   </p>
 </div>
 {% endblock %}

@@ -121,9 +121,9 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <h2>My_Dashboard</h2>
-        <div class="welcome">Welcome, Martin <strong>{{ session.username }}</strong></div>
-        <div class="user-count">Total Registered Users: <strong>{{ users|length }}</strong></div>
+        <h2 style="color:black"><strong>My_Dashboard</strong></h2>
+        <div class="welcome" style="color:black">Welcome, Martin <strong>{{ session.username }}</strong></div>
+        <div class="user-count" style="color:black">Total Registered Users: <strong>{{ users|length }}</strong></div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -134,7 +134,7 @@
         {% endwith %}
 
         <!-- 👥 Manage Users -->
-        <h3>Registered Users</h3>
+        <h3 style="color:black">Registered Users</h3>
         <input type="text" id="searchInput" placeholder="Search by username...">
         <table>
             <tr><th>ID</th><th>Username</th><th>Email</th><th>Action</th></tr>
@@ -144,8 +144,8 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
                 <td>
-                    <form method="post" style="display:inline;">
-                        <input type="hidden" name="remove_user_id" value="{{ user.id }}">
+                    <form method="post" style="display:inline; color:black">
+                        <input type="hidden" name="remove_user_id" value="{{ user.id }}" >
                         <button type="submit" class="remove-btn"
                             onclick="return confirm('Remove {{ user.username }}?');">Remove</button>
                     </form>
@@ -155,7 +155,7 @@
         </table>
 
         <!-- 📊 App Review Analytics -->
-        <h3>App Review Analytics 📊</h3>
+        <h3><strong>App Review Analytics 📊</strong></h3>
         {% if total_reviews > 0 %}
             <p><strong>Average Rating:</strong> {{ "%.1f"|format(avg_rating) }}/5 ({{ total_reviews }} reviews)</p>
 
