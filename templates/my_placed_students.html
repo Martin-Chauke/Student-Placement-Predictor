@@ -109,28 +109,6 @@
 {% else %}
   <p class="mt-5">No students placed yet!</p>
 {% endif %}
- 
-    <!--<div class="placed-container">
-        <h2>Admitted Students</h2>
-        {% if students %}
-        <table>
-            <tr>
-                <th>Name</th><th>CGPA</th><th>IQ</th><th>Profile Score</th>
-            </tr>
-            {% for s in students %}
-            <tr>
-                <td>{{ s.name }}</td>
-                <td>{{ s.cgpa }}</td>
-                <td>{{ s.iq }}</td>
-                <td>{{ s.profile_score }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        {% else %}
-        <div class="no-data">No placed students found.</div>
-        {% endif %}
-        <a href="{{ url_for('home') }}" class="back-link">&larr; Back to Home</a>
-    </div>
-    -->
+  
 </body>
 </html>

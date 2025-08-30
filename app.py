@@ -320,8 +320,16 @@ def home():
     return render_template("index.html", 
                            username=session.get("username"),
                            placed_students=placed_students,
-                           notification=notification)
+                           notification=notification,
+                           is_admin=session.get("is_admin"))
      
+
+
+#a context processor makes is_admin to be available globally in every template
+@app.context_processor
+def inject_user_role():
+    return dict(is_admin=session.get("is_admin"))
+
 
 # This is a route to view placed students for the logged-in user
 @app.route("/my_placed_students")
@@ -334,7 +342,7 @@ def my_placed_students():
     return render_template("my_placed_students.html", placed_students=placed_students)
 
 
-#This route implements the deletion or editing of the students
+ 
 #Manage placed students(Edit / Delete)
 @app.route("/edit_student/<int:student_id>", methods=["GET", "POST"])
 @login_required

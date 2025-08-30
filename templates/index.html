@@ -6,7 +6,7 @@
 
 
 <!--View the notification again when it disappears-->
-<button id="view-again-btn" class="btn btn-outline-info mt-3" style="display:none;">
+<button id="view-again-btn"  class="btn btn-outline-info mt-3" style="display:none; color:white">
  View Insight Again🔄️
 </button>
 
@@ -46,7 +46,6 @@
 </style>
 {% extends "base.html" %}
 {% block content %}
-
 <div class="home-content">
 <div class="glass p-4 p-md-5 mx-auto" style="max-width: 900px;">
   <h3 class="text-center mb-3" style="color:black"><strong>STUDENT PLACEMENT PREDICTION</strong></h3>
@@ -68,36 +67,10 @@
       <input type="number" name="profile_score" min="0" max="100" required class="form-control" placeholder="Enter Profile Score(0 – 100)">
     </div>
     <button type="submit" class="btn btn-neo w-100">Predict</button>
+  
   </form>
+  
 </div>
 </div>
-<!--
-{% if placed_students %}
-<h4 class="mt-5 mb-3">All Placed Students</h4>
-<div style="overflow-x:auto;">
-  <table class="table" border="1" cellpadding="8" style="width:100%;background:#fafdff">
-    <thead>
-      <tr style="background: linear-gradient(90deg,#43cea2 0%, #185a9d 100%); color:#fff;">
-        <th>Student Name</th>
-        <th>CGPA</th>
-        <th>IQ Level</th>
-        <th>Profile Score</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for student in placed_students %}
-      <tr>
-        <td>{{ student.Student_name }}</td>
-        <td>{{ student.CGPA }}</td>
-        <td>{{ student.IQ_level }}</td>
-        <td>{{ student.Profile_score }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% else %}
-  <p class="mt-5">No students placed yet!</p>
-{% endif %}
--->
+ 
 {% endblock %}
