@@ -117,7 +117,8 @@ def init_db():
     password TEXT NOT NULL,
     is_admin INTEGER DEFAULT 0
     )""")
-   # conn.execute("DROP TABLE IF EXISTS placed_students") removes the created table
+
+
     #Create placed _students table if it doesn't exist
     conn.execute("""
     CREATE TABLE IF NOT EXISTS placed_students(
@@ -139,8 +140,7 @@ def init_db():
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (reviewer_id) REFERENCES users (id)
      )""")
-
-
+ 
 
     #create default admin if not exists
     admin=conn.execute("SELECT * FROM users WHERE username=?",("admin",)).fetchone()
@@ -188,6 +188,19 @@ def admin_dashboard():
             flash("User removed.","success")
         elif user_id:
             flash("You cannot remove your self.","warning")
+    
+    # approve the review
+    approve_id=request.form.get("approve_review_id")
+    if approve_id:
+        conn.execute("UPDATE app_reviews SET status = 'approved' WHERE id = ?", (approve_id,))
+        conn.commit()
+        flash("Review approved✅.","success")
+    #delete review
+    delete_id=request.form.get("delete_review_id")
+    if delete_id:
+        conn.execute("DELETE FROM app_reviews WHERE id=?",(delete_id,))
+        conn.commit()
+        flash("Review deleted❌.","danger")
 
     # Fetch users
     users = conn.execute("SELECT * FROM users").fetchall()
@@ -196,11 +209,22 @@ def admin_dashboard():
     rating_counts=conn.execute("""
         SELECT rating,  COUNT(*) AS count
         FROM app_reviews
+        WHERE app_reviews.status='approved'
         GROUP BY rating
         ORDER BY rating DESC
  """).fetchall()
+
+    avg_rating=conn.execute("SELECT AVG(rating) AS avg FROM app_reviews where status='approved'").fetchone()["avg"]
     
-    avg_rating=conn.execute("SELECT AVG(rating) AS avg FROM app_reviews").fetchone()["avg"]
+    # fetch pending (unapproved) reviews
+    pending_reviews = conn.execute("""
+        SELECT ar.id, u.username, ar.rating, ar.comment, ar.created_at
+        FROM app_reviews ar
+        JOIN users u ON ar.reviewer_id = u.id
+        WHERE ar.status='pending'
+        ORDER BY ar.created_at DESC
+    """).fetchall()
+
 
     recent_reviews = conn.execute("""
         SELECT users.username, app_reviews.rating, app_reviews.comment, app_reviews.created_at
@@ -220,7 +244,8 @@ def admin_dashboard():
         rating_counts=rating_counts,
         avg_rating=avg_rating or 0,
         total_reviews=sum(row["count"] for row in rating_counts),
-        recent_reviews=recent_reviews
+        recent_reviews=recent_reviews,
+        pending_reviews=pending_reviews
         )
 
 # Register route
@@ -303,7 +328,7 @@ def login_required(f):
     return wrapper
 
 # Load pretrained model
-with open("model.pkl", "rb") as f:
+with open("model1.pkl", "rb") as f:
     model = pickle.load(f)
 
 @app.route("/")
@@ -468,7 +493,7 @@ def predict():
                 conn.commit()
             flash("Student details added successfully.")
             conn.close()
-            #print("Student details added successfully.")
+            
 
         else:
             placement_status = "Not Placed ❌"
@@ -527,8 +552,8 @@ def app_reviews():
 
         # Save review
         conn.execute(
-            "INSERT INTO app_reviews (reviewer_id, rating, comment) VALUES (?, ?, ?)",
-            (session["user_id"], rating, comment),
+            "INSERT INTO app_reviews (reviewer_id, rating, comment, status) VALUES (?, ?, ?, ?)",
+            (session["user_id"], rating, comment, "pending"),
         )
         conn.commit()
 
@@ -564,6 +589,7 @@ def public_reviews():
         SELECT users.username, app_reviews.rating, app_reviews.comment, app_reviews.created_at
         FROM app_reviews
         JOIN users ON app_reviews.reviewer_id = users.id
+        WHERE app_reviews.status = 'approved'
         ORDER BY app_reviews.created_at DESC
     """).fetchall()
 

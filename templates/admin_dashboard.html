@@ -169,30 +169,45 @@
                 </tr>
                 {% endfor %}
             </table>
+        {% endif %}
 
             <!-- 📝 Recent Reviews -->
-            <h4>Recent Reviews</h4>
-            {% if recent_reviews %}
-                <div class="reviews-container">
-                    {% for r in recent_reviews %}
-                       <div class="review-card">
-                            <div class="review-header">
-                                <span class="review-user">👤 {{ r['username'] }}</span>
-                                <span class="review-rating">{{ r['rating'] }} ⭐</span>
-                            </div>
-                            <div class="review-comment">
-                                  {{ r['comment'] or "No comment" }}
-                            </div>
-                            <div class="review-date">
-                                📅 {{ r['created_at'] }}
-                            </div>
-                        </div>
-                         {% endfor %}
-                 </div>
-                 {% endif %}
-        {% else %}
-            <p>No reviews yet.</p>
-        {% endif %}
+            <!-- 📝 Pending Reviews (Admin Approval Needed) -->
+<h3><strong>Pending Reviews (Approval Required)</strong></h3>
+{% if pending_reviews %}
+    <div class="reviews-container">
+        {% for r in pending_reviews %}
+           <div class="review-card">
+                <div class="review-header">
+                    <span class="review-user">👤 {{ r['username'] }}</span>
+                    <span class="review-rating">{{ r['rating'] }} ⭐</span>
+                </div>
+                <div class="review-comment">
+                      {{ r['comment'] or "No comment" }}
+                </div>
+                <div class="review-date">
+                    📅 {{ r['created_at'] }}
+                </div>
+
+                <!-- ✅ Approve / ❌ Delete actions -->
+                <div style="margin-top:10px;">
+                    <form method="post" style="display:inline;">
+                        <input type="hidden" name="approve_review_id" value="{{ r['id'] }}">
+                        <button type="submit" class="remove-btn" style="background:green;"
+                            onclick="return confirm('Approve this review?');">✅ Approve</button>
+                    </form>
+                    <form method="post" style="display:inline;">
+                        <input type="hidden" name="delete_review_id" value="{{ r['id'] }}">
+                        <button type="submit" class="remove-btn" style="background:red;"
+                            onclick="return confirm('Delete this review?');">❌ Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No pending reviews 🎉</p>
+{% endif %}
 
         <a href="{{ url_for('home') }}" class="back-link">🔙 Home</a>
     </div>

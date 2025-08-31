@@ -103,11 +103,13 @@
       {% endfor %}
     </tbody>
   </table>
-  <a style="margin-top: 20px; display: inline-block; background-color: #f0f7f8; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-  border-radius: 5px; padding: 8px 12px;" href="{{ url_for('home')}}" class="back-link" >&larr;🔙Home</a>
+  <a style="margin-top: 20px; display: inline-block; background-color: #f0f7f8; 
+  border-radius: 5px; padding: 8px 12px;" href="{{ url_for('home')}}" class="back-link" >🔙Home</a>
 </div>
 {% else %}
-  <p class="mt-5">No students placed yet!</p>
+  <p class="mt-5" style="color:red; text-align: center; font-size:30px;text-shadow: black; box-shadow: black;"><strong>🗃️No students placed yet!</strong></p>
+  <a style="margin-top: 20px; display: inline-block; background-color: #f0f7f8;
+  border-radius: 5px; padding: 8px 12px; position:center;" href="{{ url_for('home')}}" class="back-link" >🔙Home</a>
 {% endif %}
   
 </body>
