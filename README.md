@@ -37,6 +37,6 @@ Students Interface]
 
 # DEMO: 
 - Check out the following links
-[LinkeIn](https://www.linkedin.com/in/martin-chauke)
-[On Web](https://student-placement-predictor-bsv2.onrender.com)
+- [LinkeIn](https://www.linkedin.com/in/martin-chauke)
+- [On Web](https://student-placement-predictor-bsv2.onrender.com)
   
