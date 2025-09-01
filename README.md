@@ -1,28 +1,65 @@
-Business Problem 
+# Purpose of the project 🔎🔎
+• Predict student placement outcomes(placed/not placed) based on 
+academic and aptitude parameters. 
 
-The placement cell of an educational institution wants to: 
+• Provide career planning interventions and recommendations for 
+students.
 
-● Predict the likelihood of a student being placed based on specific 
-inputs like CGPA, IQ level, Profile Score. 
+• Allow authenticated users to add, view, edit and delete placed student 
+records.
 
-● Use this prediction to provide timely career guidance, recommend 
-interventions (e.g., training, internships), and allocate placement 
-resources more effectively. 
+• Give administrators control over users and ensure secure access.
 
-While a machine learning model has already been trained to make such 
-predictions, non-technical users (like placement officers and faculty 
-members) do not have an easy way to access the model’s predictions. 
-They need a user-friendly, accessible web interface to use this tool 
-effectively.
+• Enhance faculty/placement to offer career support and guidance with 
+daily placement insightful quotes.
 
-Objective:
-To build and deploy a Student Placement Prediction Web App using Python 
-and Flask that enables users to:
+• Allow users to leave reviews after using the App. 
 
-● Enter relevant student information via a simple web form. 
+# Main Components 
+• Authentication & User Management 
 
-● Receive real-time predictions (e.g., “Placed” or “Not Placed”) using a 
-pre-trained machine learning model. 
+• Placement Prediction 
 
-● Use predictions to make data-informed decisions for career planning 
-and support.
+• Database Layer (SQLite) 
+
+• Placement Management 
+
+• Intervention Notifications 
+
+• Daily Placement Insights 
+
+•  UI/UX with Glassmorphism theme 
+
+• App Review 
+
+# Data Flow 
+• User Authentication → Register/Login → Session created. 
+
+• Prediction Flow: Inputs(Fullname,CGPA,IQ,Profile) → validated→ 
+model predicts → placed saved or recommendation shown.
+
+• Placement Management Flow: Users view, edit, delete their placed 
+students.
+
+• Notification Flow: Daily insightful message on login
+
+# Flow Diagram 
+[User] → Login/Register  → [Authentication System] → [Session Created] 
+→ [Daily Placement insight displayed]  [Prediction Form] → [Validation] 
+→ [ML Model]  Placed?-------No → Show Recommendations | Yes  Save 
+Student → [Placed_Students Table]  View/Edit/Delete →[Manage 
+Students Interface]  
+# Technology Stack/ TOOLS
+- Flask(python),
+- SQLite,
+- scikit-learn,
+- Bootstrap,
+- HTML/CSS (Glassmorphism),
+- jinja2
+- Git/Github
+
+# DEMO: 
+- Check out the following links ⛓️‍💥🔗🔗⛓️‍💥
+- [LinkedIn](https://www.linkedin.com/in/martin-chauke)
+- [On the Web/placement_predictor](https://student-placement-predictor-bsv2.onrender.com)
+  
