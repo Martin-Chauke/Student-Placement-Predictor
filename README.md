@@ -49,6 +49,14 @@ students.
 → [ML Model]  Placed?-------No → Show Recommendations | Yes  Save 
 Student → [Placed_Students Table]  View/Edit/Delete →[Manage 
 Students Interface]  
+# Technology Stack/ TOOLS
+- Flask(python),
+- SQLite,
+- scikit-learn,
+- Bootstrap,
+- HTML/CSS (Glassmorphism),
+- jinja2
+- Git/Github
 
 # DEMO: 
 - Check out the following links ⛓️‍💥🔗🔗⛓️‍💥
