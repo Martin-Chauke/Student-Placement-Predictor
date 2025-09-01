@@ -17,12 +17,19 @@ daily placement insightful quotes.
 
 # Main Components 
 • Authentication & User Management 
+
 • Placement Prediction 
+
 • Database Layer (SQLite) 
+
 • Placement Management 
+
 • Intervention Notifications 
+
 • Daily Placement Insights 
+
 •  UI/UX with Glassmorphism theme 
+
 • App Review 
 
 # Data Flow 
