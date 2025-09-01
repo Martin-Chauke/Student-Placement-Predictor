@@ -1,13 +1,18 @@
 # Purpose of the project 
 • Predict student placement outcomes(placed/not placed) based on 
 academic and aptitude parameters. 
+
 • Provide career planning interventions and recommendations for 
-students. 
+students.
+
 • Allow authenticated users to add, view, edit and delete placed student 
-records.  
-• Give administrators control over users and ensure secure access. 
+records.
+
+• Give administrators control over users and ensure secure access.
+
 • Enhance faculty/placement to offer career support and guidance with 
-daily placement insightful quotes. 
+daily placement insightful quotes.
+
 • Allow users to leave reviews after using the App. 
 
 # Main Components 
@@ -22,10 +27,13 @@ daily placement insightful quotes.
 
 # Data Flow 
 • User Authentication → Register/Login → Session created. 
+
 • Prediction Flow: Inputs(Fullname,CGPA,IQ,Profile) → validated→ 
-model predicts → placed saved or recommendation shown. 
+model predicts → placed saved or recommendation shown.
+
 • Placement Management Flow: Users view, edit, delete their placed 
-students. 
+students.
+
 • Notification Flow: Daily insightful message on login
 
 # Flow Diagram 
