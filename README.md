@@ -1,4 +1,4 @@
-# Purpose of the project 
+# Purpose of the project 🔎🔎
 • Predict student placement outcomes(placed/not placed) based on 
 academic and aptitude parameters. 
 
@@ -51,7 +51,7 @@ Student → [Placed_Students Table]  View/Edit/Delete →[Manage
 Students Interface]  
 
 # DEMO: 
-- Check out the following links
+- Check out the following links ⛓️‍💥🔗🔗⛓️‍💥
 - [LinkedIn](https://www.linkedin.com/in/martin-chauke)
 - [On the Web/placement_predictor](https://student-placement-predictor-bsv2.onrender.com)
   
