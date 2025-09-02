@@ -8,6 +8,10 @@ import os
 from dotenv import load_dotenv
 from functools import wraps
 from datetime import datetime
+from itsdangerous import URLSafeTimedSerializer
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 #import random
 
 
@@ -97,7 +101,14 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-app.secret_key=os.environ.get("SECRET_KEY","dev_secret") # fall back to "dev_secret " if not found
+SECRET_KEY=os.environ.get("SECRET_KEY","dev_secret")
+app.secret_key=SECRET_KEY
+
+
+#Create the serializer using a definite string
+s = URLSafeTimedSerializer(SECRET_KEY)
+
+
 
 #setup the database(sqlite) 
 DATABASE="users.db"
@@ -623,7 +634,83 @@ def public_reviews():
     # save the previous page(referrer) if available
     prev_page= request.referrer
     return render_template("public_reviews.html", reviews=reviews,prev_page=prev_page)
+#-----------------------------------------------------------------------------------------------------------------
+#Password reset in case the use forgot it
+# Serializer for tokens
+app.secret_key=os.environ.get("SECRET_KEY","dev_secret")
+ # fall back to "dev_secret " if not found
 
+
+smtp_server="smtp.gmail.com"
+smtp_port=587
+sender = "martinchauke2003@gmail.com"
+password = "ljgu sqvo ozog wlga"
+# Simple email sending function
+def send_email(to, subject, body):
+
+    msg = MIMEMultipart()
+    msg["Subject"] = subject
+    msg["From"] = sender
+    msg["To"] = to
+
+
+    # Attach plain text
+    msg.attach(MIMEText(body,"plain"))
+    try:
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(sender, password)
+            server.sendmail(sender, [to], msg.as_string())
+         
+    except Exception as e:
+        print(f"Error sending email: {e}")
+
+@app.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form["email"]
+
+        conn = get_db_connection()
+        user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        conn.close()
+
+        if user:
+            token = s.dumps(email, salt="password-reset-salt")
+            reset_url = url_for("reset_password", token=token, _external=True)
+
+            send_email(
+                to=email,
+                subject="Password Reset Request",
+                body=f"Click the link to reset your password:\n{reset_url}\n\nThis link expires in 30 minutes."
+            )
+
+            flash("Password reset link sent to your email.", "info")
+        else:
+            flash("No account found with that email.", "danger")
+
+    return render_template("forgot_password.html")
+
+# Reset password route
+@app.route("/reset_password/<token>",methods=["GET", "POST"])
+def reset_password(token):
+    try:
+        email=s.loads(token, salt="password-reset-salt",max_age=1800) #valid for 30 mins 
+    except:
+        flash("Invalid or expired reset link","danger")
+        return  redirect(url_for("login"))
+    
+    if request.method == "POST":
+        new_password=generate_password_hash(request.form["password"])
+
+        conn=get_db_connection()
+        conn.execute("UPDATE users SET password=?",(new_password,email))
+        conn.commit()
+        conn.close()
+
+        flash("Password reset successful! Please login.","success")
+        return redirect(url_for("login"))
+    
+    return render_template("reset_password.html")
 
 if __name__ == "__main__":
     init_db() #Ensure the users table exists
