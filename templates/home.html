@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-center min-vh-100 text-center"
+     style="background: linear-gradient(to right, #0f0f0f, #4cbfca, #2c2c2c); color: white; padding: 10px 10px;box-shadow: black">
+
+  <div class="p-5 rounded shadow-lg w-100" style="background: rgba(32, 59, 59, 0.75); max-width: 900px;">
+    <h1 class="mb-3">📊 Placement Prediction System</h1>
+    <p class="lead">
+      Built for <strong>educational institutions & placement officers</strong>  
+      to evaluate student readiness and predict placement outcomes based on academic & aptitude parameters.
+      These include  <strong>CGPA, IQ level, and Profile Score</strong>.
+       For more infor check the "About" above
+    </p>
+    
+
+    <hr class="my-4" style="border-color: #888;">
+
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{{ url_for('predict_page') }}" class="btn btn-outline-info btn-lg" style="border-color:green; color:rgb(44, 223, 98)"><strong>Want To Give It A Try First👆🏾?</strong></a>
+      <a href="{{ url_for('login') }}" class="btn btn-outline-info btn-lg" style="border-color:green; color:rgb(44, 223, 98)"><strong>Login</strong></a>
+      <a href="{{ url_for('register') }}" class="btn btn-outline-info btn-lg" style="border-color:green; color:rgb(44, 223, 98)"><strong>Register</strong></a>
+    </div>
+  </div>
+{% if session.get("user_id") and prev_page %}
+  <div class="alert alert-info mt-3"> 
+      <a href="{{ prev_page }}"><strong>Continue to your current page.</strong></a>
+  </div>
+{% endif %}
+
+{% if session.get("is_admin") and prev_page %}
+<div class="mt-2">
+    <a class="btn btn-danger" href="{{ prev_page }}"><strong>Admin Previous</strong></a>
+</div>
+{% endif %}
+</div>
+
+{% endblock %}
+ 

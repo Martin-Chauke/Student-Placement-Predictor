@@ -57,7 +57,12 @@
             <p>No reviews yet.</p>
         {% endif %}
         <br>
-        <a href="{{ url_for('home') }}">🔙<strong>Home</strong></a>
+        {% if session.get("user_id") and prev_page %}
+           <a href="{{ prev_page }}">⬅️<strong>BACK</strong></a>
+        {% else %}
+              <a href="{{ url_for('home') }}">🔙<strong>Home</strong></a>
+        {% endif %}
+
     </div>
 </body>
 </html>

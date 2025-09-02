@@ -104,12 +104,12 @@
     </tbody>
   </table>
   <a style="margin-top: 20px; display: inline-block; background-color: #f0f7f8; 
-  border-radius: 5px; padding: 8px 12px;" href="{{ url_for('home')}}" class="back-link" >🔙Home</a>
+  border-radius: 5px; padding: 8px 12px;" href="{{ url_for('predict_page')}}" class="back-link" >🔙Back</a>
 </div>
 {% else %}
   <p class="mt-5" style="color:red; text-align: center; font-size:30px;text-shadow: black; box-shadow: black;"><strong>🗃️No students placed yet!</strong></p>
   <a style="margin-top: 20px; display: inline-block; background-color: #f0f7f8;
-  border-radius: 5px; padding: 8px 12px; position:center;" href="{{ url_for('home')}}" class="back-link" >🔙Home</a>
+  border-radius: 5px; padding: 8px 12px; position:center;" href="{{ url_for('predict_page')}}" class="back-link" >🔙Back</a>
 {% endif %}
   
 </body>

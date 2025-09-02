@@ -10,10 +10,15 @@ border-color: rgb(35, 43, 43); border-style: broken; border-width: 1px;">
 
 <nav style="color:black; background-color: rgb(70, 207, 219); border-color: rgb(35, 43, 43); border-style: broken; border-width: 1px;" class="navbar navbar-expand-lg navbar-light">
   <div class="container-fluid">
-    <a style="color:black; " href="/"><strong>Placement Predictor</strong></a>
+    {% if session.get("user_id") %}
+      <a style="color:black;" href="{{ prev_page }}"><strong>Placement Predictor</strong></a>
+    {% else %}
+      <a style="color:black;" href="{{ url_for('home') }}"><strong>Placement Predictor</strong></a>
+    {% endif %}
+
     <div style="color:black;">
       <ul class="navbar-nav ms-auto">
-        <li  class="nav-item" style="color:black;"><a class="nav-link" href="/"><strong>Home</strong></a></li>
+        <!--<li  class="nav-item" style="color:black;"><a class="nav-link" href="/"><strong>Home</strong></a></li>-->
         <li  class="nav-item" style="color:black;"><a class="nav-link active" href="/about"><strong>About</strong></a></li>
       </ul>
     </div>
@@ -48,5 +53,10 @@ border-color: rgb(35, 43, 43); border-style: broken; border-width: 1px;">
     </div>
 </div>
 
+      {% if session.get("user_id") and prev_page %}
+          <a href="{{ prev_page }}">⬅️<strong>BACK</strong></a>
+      {% else %}
+          <a href="{{ url_for('home') }}">🔙<strong>Home</strong></a>
+      {% endif %}
 </body>
 </html>

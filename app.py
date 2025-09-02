@@ -303,7 +303,7 @@ def login():
             session["is_admin"]=user["is_admin"]
  
             flash("Login successful!","success")
-            return redirect(url_for("home"))
+            return redirect(url_for("predict_page"))
         else:
             flash("Invalid username or password","danger")
             return redirect(url_for("login"))
@@ -315,7 +315,7 @@ def login():
 def logout():
     session.clear()
     flash("Logged out successfully.","info")
-    return redirect(url_for("login"))
+    return redirect(url_for("home"))
 
 #protect routes (only logged-in users can access)
 def login_required(f):
@@ -331,9 +331,23 @@ def login_required(f):
 with open("model1.pkl", "rb") as f:
     model = pickle.load(f)
 
+# Track last page
+@app.before_request
+def save_last_page():
+    # Don’t track static, login, logout, register, or home itself
+    if request.endpoint not in ("login", "logout", "register", "static", "home"):
+        session["prev_page"] = request.path
+
+
+# Home route
 @app.route("/")
-@login_required
+
 def home():
+    prev_page=session.get("prev_page")
+    return render_template("home.html", prev_page=prev_page)
+
+@app.route("/predict_page")
+def predict_page():
     user_id=session.get("user_id")
     conn=get_db_connection()
     placed_students=conn.execute("SELECT * FROM placed_students WHERE User_id=?",(user_id,)
@@ -433,11 +447,20 @@ def delete_student(student_id):
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    prev_page=request.referrer if request.referrer else url_for("home")
+
+    # if logged in, remember it in session so Home can use it later
+    if "user_id" in session:
+        session["prev_page"] = request.referrer or url_for("home")
+    return render_template("about.html", prev_page=session.get("prev_page"))
 
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
+
+        # student name placeholder
+        name=request.form.get("student_name","Unknown")
+
         # Collect form data
         cgpa = float(request.form["cgpa"])
         iq = float(request.form["iq"])
@@ -489,8 +512,7 @@ def predict():
                 conn.execute("INSERT INTO placed_students (User_id,Student_name, CGPA, IQ_level, Profile_score) VALUES (?, ?, ?, ?, ?)",
                          (user_id, name, cgpa, iq, profile_score)
                          )
-            
-                conn.commit()
+            conn.commit()
             flash("Student details added successfully.")
             conn.close()
             
@@ -514,6 +536,9 @@ def predict():
                 recommendation="The student’s profile is balanced but still below placement readiness standards. " \
                 "<<Intervention>>: Recommend one-on-one counseling to design a tailored career plan, including resume workshops, mock interviews, and soft-skills development"
 
+        
+        
+         
         # Render result template
         return render_template("result.html", 
                                placement_status=placement_status,
@@ -523,6 +548,7 @@ def predict():
                                cgpa=cgpa, iq=iq, profile_score=profile_score,
                                recommendation=recommendation,
                                student_name=name)
+    
 
     except Exception as e:
         return render_template("result.html", 
@@ -594,7 +620,9 @@ def public_reviews():
     """).fetchall()
 
     conn.close()
-    return render_template("public_reviews.html", reviews=reviews)
+    # save the previous page(referrer) if available
+    prev_page= request.referrer
+    return render_template("public_reviews.html", reviews=reviews,prev_page=prev_page)
 
 
 if __name__ == "__main__":
