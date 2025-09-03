@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="glass p-4 p-md-5 mx-auto text-center" style="max-width: 800px;">
-  <h3 class="mb-3">Prediction Result</h3>
+  <h3 class="mb-3" style="color: black;"><strong>Prediction Result</strong></h3>
   <div class="neon-alert alert mt-2">
     <h2 class="{{ text_color == 'text-success' and 'text-placed' or 'text-not' }}">
       {{ placement_status }}
